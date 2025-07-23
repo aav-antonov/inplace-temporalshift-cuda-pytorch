@@ -121,7 +121,6 @@ void temporal_shift_inplace_forward(at::Tensor& input, int64_t fold) {
     const int h = input.size(3);
     const int w = input.size(4);
 
-    //const int threads = 1024;
     const int blocks = (n );
 
     AT_DISPATCH_FLOATING_TYPES(input.scalar_type(), "temporal_shift_forward", ([&] {
@@ -147,7 +146,6 @@ void temporal_shift_inplace_backward(at::Tensor& input, int64_t fold) {
     const int h = input.size(3);
     const int w = input.size(4);
 
-    //const int threads = 1024;
     const int blocks = (n);
 
 
