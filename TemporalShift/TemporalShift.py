@@ -11,6 +11,9 @@ torch.ops.load_library(str(so_file))
 forward_ts = torch.ops.tsm2.forward_ts.default
 backward_ts = torch.ops.tsm2.backward_ts.default
 
+#forward_ts_vect = torch.ops.tsm2.forward_ts_vect.default
+#backward_ts_vect = torch.ops.tsm2.backward_ts_vect.default
+
 
 class InplaceShift(Function):
     @staticmethod

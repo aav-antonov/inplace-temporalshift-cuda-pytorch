@@ -7,6 +7,7 @@ setup(
         CUDAExtension('tsm_cuda2', [
             'TemporalShift.cpp',
             'TemporalShift_cuda.cu',
+            #'TemporalShift_cuda_vect.cu',
         ],
         extra_compile_args={'cxx': ['-g'], 'nvcc': ['-O2']})
     ],
