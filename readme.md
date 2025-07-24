@@ -9,9 +9,12 @@ This repository contains an optimized in-place implementation of the TemporalShi
 - 📊 **Comprehensive benchmarks** for memory and performance
 
 ## Installation
+
+```bash
 git clone https://github.com/aav-antonov/inplace-temporalshift-cuda-pytorch.git
 cd inplace-temporalshift-cuda-pytorch/TemporalShift
 python setup_tsm.py build_ext --inplace --force
+```
 
 ## Benchmark Results
 
