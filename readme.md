@@ -1,6 +1,12 @@
 # In-Place TemporalShift Operator: A PyTorch CUDA Custom Kernel Implementation
 
-This repository contains an optimized in-place implementation of the TemporalShift operation for video understanding models, implemented as a custom CUDA kernel operator for PyTorch. Based on the original Temporal Shift Module (TSM) from [MIT-Han-Lab/TSM](https://github.com/mit-han-lab/temporal-shift-module).
+This repository contains an optimized in-place implementation of the 
+TemporalShift operation for video understanding models, 
+implemented as a custom CUDA kernel operator for PyTorch. 
+Based on the original Temporal Shift Module ([MIT-Han-Lab/TSM](https://github.com/mit-han-lab/temporal-shift-module)) 
+and Temporal Shift with Audio Modality ([TSAM](https://github.com/aav-antonov/TSAM)) 
+
+
 ## Key Features
 
 - ✅ **In-place operation** reducing memory usage by 50%
@@ -49,3 +55,11 @@ x_shifted = TemporalShift.shift(x, n_segment=16, fold_div=4, inplace=True)
 
 # Out-of-place operation
 x_shifted = TemporalShift.shift(x, n_segment=16, fold_div=4, inplace=False)
+```
+
+### Requirements
+
+- **PyTorch**: 1.7 or higher
+- **GPU**: CUDA 10.2+ compatible
+- **Python**: 3.6 or higher
+- **NVIDIA CUDA Toolkit**: Required (version should match PyTorch CUDA version)
