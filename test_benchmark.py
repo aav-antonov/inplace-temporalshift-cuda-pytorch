@@ -33,8 +33,9 @@ def single_test_temporal_shift_operation(x, n_segment, fold_div):
 
 def test_correctness_temporal_shift_operation():
 
-    torch.manual_seed(42)
-    random.seed(42)
+    current_seed = int(time.time() * 1e9) % (2 ** 32 - 1)
+    torch.manual_seed(current_seed)
+    random.seed(current_seed)
 
     # Define min/max thresholds for each parameter
     param_ranges = {

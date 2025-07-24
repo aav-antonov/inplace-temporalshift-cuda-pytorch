@@ -8,8 +8,8 @@ script_dir = Path(__file__).parent.resolve()
 so_file = script_dir / "tsm_cuda2.cpython-310-x86_64-linux-gnu.so"
 torch.ops.load_library(str(so_file))
 
-forward_ts = torch.ops.tsm2.forward_ts.default
-backward_ts = torch.ops.tsm2.backward_ts.default
+tsm_inplace = torch.ops.tsm2.tsm_inplace.default
+#backward_ts = torch.ops.tsm2.backward_ts.default
 
 #forward_ts_vect = torch.ops.tsm2.forward_ts_vect.default
 #backward_ts_vect = torch.ops.tsm2.backward_ts_vect.default
@@ -22,7 +22,7 @@ class InplaceShift(Function):
             raise RuntimeError("InplaceShift requires CUDA tensors")
 
         # Use the compiled wrapper which handles both the operation and autograd registration
-        forward_ts(input, fold)
+        tsm_inplace(input, fold, 1)
         ctx.fold = fold
         return input
 
@@ -32,7 +32,7 @@ class InplaceShift(Function):
             grad_output = grad_output.contiguous()
 
         # we call the compiled backward directly if needed
-        backward_ts(grad_output, ctx.fold)
+        tsm_inplace(grad_output, ctx.fold, 0)
         return grad_output, None
 
 class TemporalShift(nn.Module):

@@ -8,6 +8,7 @@
 
 #define threads  1024
 
+
 template <typename scalar_t>
 __device__ void shift_up_fold(
         scalar_t* __restrict__ input,
@@ -77,6 +78,8 @@ __device__ void shift_down_fold(
         input_seg_last[j] = 0;
     }
 }
+//------------------------------------------//
+
 
 
 
@@ -108,36 +111,7 @@ __global__ void temporal_shift_kernel(
     }
 }
 
-
-
-
-
-void temporal_shift_inplace_forward(at::Tensor& input, int64_t fold) {
-    TORCH_CHECK(input.dim() == 5, "Input must be 5D tensor (n,t,c,h,w)");
-
-    const int n = input.size(0);
-    const int t = input.size(1);
-    const int c = input.size(2);
-    const int h = input.size(3);
-    const int w = input.size(4);
-
-    const int blocks = (n );
-
-    AT_DISPATCH_FLOATING_TYPES(input.scalar_type(), "temporal_shift_forward", ([&] {
-        temporal_shift_kernel<scalar_t><<<blocks, threads>>>(
-            input.data_ptr<scalar_t>(), n, t, c, h, w, fold, 1);
-
-        cudaDeviceSynchronize();
-
-        auto err = cudaGetLastError();
-        if (err != cudaSuccess) {
-            printf("Error in temporal_shift_forward_kernel: %s\n", cudaGetErrorString(err));
-        }
-    }));
-
-}
-
-void temporal_shift_inplace_backward(at::Tensor& input, int64_t fold) {
+void temporal_shift_inplace(at::Tensor& input, int64_t fold, int64_t forward) {
     TORCH_CHECK(input.dim() == 5, "Input must be 5D tensor (n,t,c,h,w)");
 
     const int n = input.size(0);
@@ -150,8 +124,8 @@ void temporal_shift_inplace_backward(at::Tensor& input, int64_t fold) {
 
 
     AT_DISPATCH_FLOATING_TYPES(input.scalar_type(), "temporal_shift_backward", ([&] {
-        temporal_shift_kernel<scalar_t><<<blocks, threads>>>(//_backward
-            input.data_ptr<scalar_t>(), n, t, c, h, w, fold, 0);
+        temporal_shift_kernel<scalar_t><<<blocks, threads>>>(
+            input.data_ptr<scalar_t>(), n, t, c, h, w, fold, forward);
 
         cudaDeviceSynchronize();
         auto err = cudaGetLastError();
