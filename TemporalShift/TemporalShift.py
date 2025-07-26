@@ -3,9 +3,12 @@ import torch.nn as nn
 from torch.autograd import Function
 from torch import Tensor
 from pathlib import Path
+import glob
+import os
 
 script_dir = Path(__file__).parent.resolve()
-so_file = script_dir / "tsm_cuda2.cpython-310-x86_64-linux-gnu.so"
+so_files = glob.glob(os.path.join(script_dir, "tsm_cuda2.cpython-*.so"))
+so_file = script_dir / so_files[0] #"tsm_cuda2.cpython-310-x86_64-linux-gnu.so"
 torch.ops.load_library(str(so_file))
 
 tsm_inplace = torch.ops.tsm2.tsm_inplace.default
