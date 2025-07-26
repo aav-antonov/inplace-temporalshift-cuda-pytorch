@@ -165,6 +165,9 @@ def benchmark_temporal_shift_operation(x, n_segment, fold_div, inplace=True, vec
         tuple: (avg_forward_time, avg_backward_time) in seconds
     """
     #compiling none inplace mode (improve perfomance)
+    import torch._dynamo
+    torch._dynamo.config.suppress_errors = True
+
     tsm = TemporalShift(IdentityModule(), n_segment, fold_div, inplace=False, vect=False)
     tsm_compiled = torch.compile(tsm, fullgraph=True)
 
