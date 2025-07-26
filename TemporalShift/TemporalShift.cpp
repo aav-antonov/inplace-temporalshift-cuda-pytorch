@@ -9,7 +9,7 @@
 // Explicit registration function
 TORCH_LIBRARY(tsm2, m) {
 
-    m.def("tsm_inplace (Tensor(a!) input, int fold, int forward) -> ()", &temporal_shift_inplace);
+    m.def("tsm_inplace (Tensor(a!) input, int fold, int forward, int vect) -> ()", &temporal_shift_inplace);
 
 }
 
