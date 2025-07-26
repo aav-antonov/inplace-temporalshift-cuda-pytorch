@@ -35,11 +35,22 @@ python setup_tsm.py build_ext --inplace --force
 | Out-of-place  | 800.0            | 1.00x (baseline) |
 | In-place      | 400.0            | 2.00x less       |
 
-### Performance (10-run average)
-| Mode          | Forward Time (s) | Backward Time (s) | Speedup Factor |
-|---------------|------------------|-------------------|----------------|
-| Out-of-place  | 0.003760         | 0.056649          | 1.00x          |
-| In-place      | 0.001368         | 0.024119          | 2.75x / 2.35x  |
+
+
+### Expected Performance Speedup In-place vs Out-of-place
+
+**Configuration**:
+- Batch size: 10  
+- Temporal segments: 16  
+- Channels: 256  
+- Spatial dimensions: 32×32  
+- Fold division: 4  
+- Benchmark runs: 100  
+
+| Mode                     | Forward Speedup | Backward Speedup |
+|--------------------------|----------------:|-----------------:|
+| In-place (non-vectored)  | 1.80×           | 1.23×            |
+| In-place (vectored)      | 2.85×           | 1.17×            |
 
 ## Usage
 
