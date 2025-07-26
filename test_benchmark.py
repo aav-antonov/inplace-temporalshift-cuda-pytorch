@@ -165,11 +165,19 @@ def benchmark_temporal_shift_operation(x, n_segment, fold_div, inplace=True, vec
         tuple: (avg_forward_time, avg_backward_time) in seconds
     """
     #compiling none inplace mode (improve perfomance)
-    import torch._dynamo
-    torch._dynamo.config.suppress_errors = True
+    # Get GPU compute capability
+    cuda_capability = torch.cuda.get_device_capability()
+    major_version = cuda_capability[0]  # First number is major version
 
     tsm = TemporalShift(IdentityModule(), n_segment, fold_div, inplace=False, vect=False)
-    tsm_compiled = torch.compile(tsm, fullgraph=True)
+    # Conditionally compile based on CUDA capability
+    if major_version >= 7:  # 7.0+ supports Triton
+        print(f"GPU detected (CUDA {cuda_capability[0]}.{cuda_capability[1]}), using torch.compile()")
+        tsm_compiled = torch.compile(tsm, fullgraph=True)
+    else:
+        print(f"GPU too old (CUDA {cuda_capability[0]}.{cuda_capability[1]}), skipping compilation")
+        tsm_compiled = tsm  # Fallback to uncompiled model
+
 
     def single_run(x, vect=False):
         """Perform a single forward-backward pass and measure timings."""
